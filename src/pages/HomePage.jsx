@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Trending from "../components/Trending";
 
 const Container = styled.div`
-  max-width: 95vw;
+  max-width: 95%;
   margin: 0px auto;
-  border: 3px solid white;
 `;
 
 const Background = styled.div`
   filter: blur(50px) brightness(1) contrast(2);
-
   background: url("https://assets.nflxext.com/ffe/siteui/vlv3/158a0e2a-cca4-40f5-86b8-11ea2a281b06/web_tall_panel/US-en-20241202-TRIFECTA-perspective_a95661f9-b926-4a2a-9687-5c79e3a10ae8_large.jpg");
-  width: 100vw;
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 `;
 
 const Hero = styled.div`
@@ -27,7 +29,7 @@ const HomePage = () => {
     <div className="relative">
       <Background />
 
-      <div className="absolute inset-0 bg-black bg-opacity-50">
+      <div className="relative inset-0 bg-black bg-opacity-50">
         <Container>
           <div className="flex justify-between bg-transparent items-center">
             <img
@@ -57,16 +59,20 @@ const HomePage = () => {
             </div>
           </div>
 
-          
           <div className="flex flex-col items-center mt-8 gap-4">
             <div className="text-slate-300">
               Ready to watch? Enter your email address to start your membership
             </div>
 
-            <Link className="px-8 py-4 bg-red-600 text-white font-bold rounded-full text-xl" to={"/signup"}>Join Now</Link>
+            <Link
+              className="px-8 py-4 bg-red-600 text-white font-bold rounded-full text-xl"
+              to={"/signup"}
+            >
+              Join Now
+            </Link>
+          </div>
 
-            </div>
-        
+          <Trending />
         </Container>
       </div>
     </div>
