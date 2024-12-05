@@ -4,21 +4,13 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import ReactDOM from "react-dom";
+import {Link} from "react-router-dom"
 
-import styled from "styled-components";
+import { StyledInput, FormError } from "./StyledFormComponents";
 
-const StyledInput = styled.input`
-  padding: 16px 16px;
-  background-color: rgba(71, 85, 105, 0.8);
-  color: white;
-`;
+const signInLabels = ["email", "password"];
 
-const FormError = styled.div`
-  color: black;
-`;
-
-const formSchema = z
+const signInSchema = z
   .object({
     identifier: z.union([
       z
@@ -38,13 +30,12 @@ const formSchema = z
   })
   .strict();
 
-const LoginForm = () => {
+const SignInForm = () => {
   const { register, handleSubmit, formState, reset } = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(signInSchema),
   });
 
   const { errors } = formState;
-  console.log("errors", errors);
 
   function onSubmit(data) {
     console.log(data);
@@ -56,14 +47,15 @@ const LoginForm = () => {
       className="absolute top-20 flex flex-col gap-4 p-16 bg-black bg-opacity-75
  w-1/3"
     >
-      <h1 className="text-3xl text-white font-bold mb-3">Sign In</h1>
+      <h1 className="text-3xl text-white font-bold mb-3">{"Sign In"}</h1>
 
       {Object.keys(errors).length > 0 && (
         <div className="bg-yellow-600 p-4">
-          {errors.identifier && (
-            <FormError>{errors.identifier.message}</FormError>
-          )}
-          {errors.password && <FormError>{errors.password.message}</FormError>}
+          {signInLabels.map((label, idx) => {
+            return errors[label] ? (
+              <FormError>{errors[label].message}</FormError>
+            ) : null;
+          })}
         </div>
       )}
 
@@ -80,10 +72,17 @@ const LoginForm = () => {
       />
 
       <button className="bg-red-600 text-white font-semibold py-2 px-4 rounded-md">
-        Sign in
+        {"Sign In"}
       </button>
+
+      <span className="text-slate-300">
+        {"New to Netflix?"}{" "}
+        <Link  to={"/signup"} className="cursor-pointer hover:underline text-white">
+          {"Sign up Now"}
+        </Link>
+      </span>
     </form>
   );
 };
 
-export default LoginForm;
+export default SignInForm;

@@ -39,9 +39,9 @@ const HomePage = () => {
             />
             <Link
               className="bg-white text-slate-700 px-4 py-2 rounded-full font-semibold"
-              to={"/login"}
+              to={"/signup"}
             >
-              Sign in
+              Sign up
             </Link>
           </div>
 
@@ -66,7 +66,7 @@ const HomePage = () => {
 
             <Link
               className="px-8 py-4 bg-red-600 text-white font-bold rounded-full text-xl"
-              to={"/signup"}
+              to={"/login"}
             >
               Join Now
             </Link>

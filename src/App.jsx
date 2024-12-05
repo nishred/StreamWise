@@ -1,11 +1,11 @@
 import React from "react";
 
-import Login from "./pages/Login";
-
+import LoginLayout from "./pages/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
-import SignUpLayout from "./pages/SignUpLayout";
+import SignUpForm from "./components/SignUpForm";
+import SignInForm from "./components/SignInForm";
 
 const App = () => {
   return (
@@ -13,9 +13,11 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />}></Route>
 
-        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<LoginLayout />}>
+          <Route index element={<SignUpForm />} />
 
-        <Route path="/signup" element={<SignUpLayout />} />
+          <Route path="login" element={<SignInForm />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

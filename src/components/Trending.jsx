@@ -82,12 +82,6 @@ const Trending = () => {
 
   const endIndex = startIndex + imagesPerPage - 1;
 
-  console.log("images per page", imagesPerPage);
-
-  console.log("start", startIndex);
-
-  console.log("end", endIndex);
-
   const filteredImages = images.filter((image, idx) => {
     if (idx >= startIndex && idx <= endIndex) return true;
   });

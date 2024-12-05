@@ -1,7 +1,7 @@
-import LoginForm from "../components/LoginForm";
+import {Outlet} from "react-router-dom"
 import ReactDOM from "react-dom";
 
-const Login = () => {
+const LoginLayout = () => {
   return (
     <div className="relative flex justify-center">
       {ReactDOM.createPortal(
@@ -14,9 +14,9 @@ const Login = () => {
       )}
       <img src="https://assets.nflxext.com/ffe/siteui/vlv3/ce449112-3294-449a-b8d3-c4e1fdd7cff5/web/US-en-20241202-TRIFECTA-perspective_0205969b-6ba1-45f4-947b-8949317cfe29_small.jpg" />
 
-      <LoginForm />
+      <Outlet />
     </div>
   );
 };
 
-export default Login;
+export default LoginLayout;
