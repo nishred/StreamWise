@@ -2,7 +2,6 @@ import { Outlet, Link } from "react-router-dom";
 
 const LoginLayout = () => {
 
-  
   return (
     <div className="relative flex justify-center">
       <Link to={"/"}>
@@ -13,7 +12,6 @@ const LoginLayout = () => {
         />
       </Link>
       <img src="https://assets.nflxext.com/ffe/siteui/vlv3/ce449112-3294-449a-b8d3-c4e1fdd7cff5/web/US-en-20241202-TRIFECTA-perspective_0205969b-6ba1-45f4-947b-8949317cfe29_small.jpg" />
-
       <Outlet />
     </div>
   );

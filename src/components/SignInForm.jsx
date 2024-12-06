@@ -22,6 +22,7 @@ const signInLabels = ["identifier", "password"];
 import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const signInSchema = z
   .object({
@@ -51,6 +52,9 @@ const SignInForm = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+
+  const [token, setToken] = useState(null);
+
   const { errors } = formState;
 
   const user = useSelector((store) => store.user);
@@ -59,13 +63,30 @@ const SignInForm = () => {
 
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (token) {
+      window.localStorage.setItem("token", token);
+    } else {
+      window.localStorage.removeItem("token");
+    }
+  }, [token]);
+
   function onSubmit(data) {
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
 
+        const { fullName, email, uid, accessToken } = user;
+
+        setToken(accessToken);
+
+        dispatch(createUser({ fullName, email, uid }));
+
         navigate("/browse");
+
+        toast.success("Signed in successfully");
+
         // ...
       })
       .catch((error) => {

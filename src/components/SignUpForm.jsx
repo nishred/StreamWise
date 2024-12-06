@@ -14,6 +14,8 @@ import { auth } from "../utils/firebase";
 import { useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { createUser } from "../redux/userSlice";
 
 const signUpLabels = ["name", "email", "password", "age"];
 
@@ -40,25 +42,44 @@ const SignUpForm = () => {
 
   const [error, setError] = useState("");
 
+  const [token, setToken] = useState(null);
+
+  const dispatch = useDispatch();
+
   const { errors } = formState;
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      window.localStorage.setItem("token", token);
+    } else {
+      window.localStorage.removeItem("token");
+    }
+  }, [token]);
 
   function onSubmit(data) {
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-
         return updateProfile(auth.currentUser, {
           displayName: data.name,
           photoURL: "https://example.com/jane-q-user/profile.jpg",
         });
       })
       .then(() => {
+        const currentUser = auth.currentUser;
+
+        const { email, displayName, uid, accessToken } = currentUser;
+
+        dispatch(createUser({ fullName: displayName, email, uid }));
+
+        setToken(accessToken);
+
         navigate("/browse");
 
-        toast("User created Sucessfully");
+        toast.success("Signed up successfully");
       })
       .catch((error) => {
         const errorCode = error.code;

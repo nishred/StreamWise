@@ -13,6 +13,10 @@ import toast from "react-hot-toast";
 const Header = ({ position = "static" }) => {
   const { isAuthenticated, fullName } = useSelector((store) => store.user);
 
+  const user = useSelector((store) => store.user);
+
+  console.log("user in header", user);
+
   console.log(isAuthenticated, fullName);
 
   const dispatch = useDispatch();
@@ -23,13 +27,12 @@ const Header = ({ position = "static" }) => {
     <div
       className={`${position} flex justify-between bg-transparent items-center`}
     >
-
       <Link to={"/"}>
-      <img
-        className="w-44"
-        src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-        alt="netflix-logo"
-      />
+        <img
+          className="w-44"
+          src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
+          alt="netflix-logo"
+        />
       </Link>
       {!isAuthenticated && (
         <Link
@@ -41,7 +44,9 @@ const Header = ({ position = "static" }) => {
       )}
       {isAuthenticated && (
         <div className="flex items-center gap-2">
-          <span className="px-2 py-1 bg-slate-700 text-white font-bold rounded-full">{fullName}</span>
+          <span className="px-2 py-1 bg-slate-700 text-white font-bold rounded-full">
+            {fullName}
+          </span>
           <button
             onClick={() => {
               signOut(auth)
@@ -49,6 +54,8 @@ const Header = ({ position = "static" }) => {
                   toast.success("Successfully logged out");
 
                   dispatch(removeUser());
+
+                  window.localStorage.removeItem("token");
 
                   navigate("/");
                 })

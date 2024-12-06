@@ -17,35 +17,10 @@ import { useDispatch } from "react-redux";
 
 import { createUser, removeUser } from "./redux/userSlice";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 const App = () => {
-  const dispatch = useDispatch();
-  const [token, setToken] = useState(null);
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const { displayName, email, uid, accessToken } = user;
-
-        console.log(user)
-
-        dispatch(createUser({ fullName: displayName, email, uid }));
-
-        setToken(accessToken);
-      } else {
-        dispatch(removeUser());
-
-        setToken(null);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      window.localStorage.setItem("token", token);
-    } else {
-      window.localStorage.removeItem("token");
-    }
-  }, [token]);
 
   return (
     <>
@@ -53,7 +28,14 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
 
-          <Route path="/browse" element={<Browse />} />
+          <Route
+            path="/browse"
+            element={
+              <ProtectedRoute>
+                <Browse />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="/signup" element={<LoginLayout />}>
             <Route index element={<SignUpForm />} />
