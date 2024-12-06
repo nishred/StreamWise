@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Trending from "../components/Trending";
+import Header from "../components/Header";
 
-const Container = styled.div`
+import { useSelector } from "react-redux";
+
+export const Container = styled.div`
   max-width: 95%;
   margin: 0px auto;
 `;
 
-const Background = styled.div`
+export const Background = styled.div`
   filter: blur(50px) brightness(1) contrast(2);
   background: url("https://assets.nflxext.com/ffe/siteui/vlv3/158a0e2a-cca4-40f5-86b8-11ea2a281b06/web_tall_panel/US-en-20241202-TRIFECTA-perspective_a95661f9-b926-4a2a-9687-5c79e3a10ae8_large.jpg");
   position: absolute;
@@ -25,25 +28,16 @@ const Hero = styled.div`
 `;
 
 const HomePage = () => {
+
+  const isAuthenticated = useSelector(store => store.user.isAuthenticated)
+   
   return (
     <div className="relative">
       <Background />
 
       <div className="relative inset-0 bg-black bg-opacity-50">
         <Container>
-          <div className="flex justify-between bg-transparent items-center">
-            <img
-              className="w-44"
-              src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-              alt="netflix-logo"
-            />
-            <Link
-              className="bg-white text-slate-700 px-4 py-2 rounded-full font-semibold"
-              to={"/signup"}
-            >
-              Sign up
-            </Link>
-          </div>
+          <Header />
 
           <div className="relative">
             <Hero />
@@ -66,9 +60,9 @@ const HomePage = () => {
 
             <Link
               className="px-8 py-4 bg-red-600 text-white font-bold rounded-full text-xl"
-              to={"/login"}
+              to={isAuthenticated?"/browse":"/signup"}
             >
-              Join Now
+              {isAuthenticated?"Browse":"Join Now"}
             </Link>
           </div>
 

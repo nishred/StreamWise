@@ -4,15 +4,28 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 
 import { StyledInput, FormError } from "./StyledFormComponents";
 
-const signInLabels = ["email", "password"];
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+import { auth } from "../utils/firebase";
+import { useEffect, useState } from "react";
+
+import { useDispatch } from "react-redux";
+
+import { createUser } from "../redux/userSlice";
+
+const signInLabels = ["identifier", "password"];
+
+import { useSelector } from "react-redux";
+
+import { useNavigate } from "react-router-dom";
 
 const signInSchema = z
   .object({
-    identifier: z.union([
+    email: z.union([
       z
         .string()
         .regex(
@@ -35,10 +48,33 @@ const SignInForm = () => {
     resolver: zodResolver(signInSchema),
   });
 
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
   const { errors } = formState;
 
+  const user = useSelector((store) => store.user);
+
+  console.log(user);
+
+  const [error, setError] = useState(null);
+
   function onSubmit(data) {
-    console.log(data);
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+
+        navigate("/browse");
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setError(errorMessage);
+      });
+
+    reset();
   }
 
   return (
@@ -56,13 +92,14 @@ const SignInForm = () => {
               <FormError>{errors[label].message}</FormError>
             ) : null;
           })}
+          {error && <FormError>{error}</FormError>}
         </div>
       )}
 
       <StyledInput
         type="text"
         placeholder="Email or mobile number"
-        {...register("identifier")}
+        {...register("email")}
       />
 
       <StyledInput
@@ -77,7 +114,10 @@ const SignInForm = () => {
 
       <span className="text-slate-300">
         {"New to Netflix?"}{" "}
-        <Link  to={"/signup"} className="cursor-pointer hover:underline text-white">
+        <Link
+          to={"/signup"}
+          className="cursor-pointer hover:underline text-white"
+        >
           {"Sign up Now"}
         </Link>
       </span>

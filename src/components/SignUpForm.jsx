@@ -4,9 +4,16 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { StyledInput, FormError } from "./StyledFormComponents";
+
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+
+import { auth } from "../utils/firebase";
+import { useEffect, useState } from "react";
+
+import toast from "react-hot-toast";
 
 const signUpLabels = ["name", "email", "password", "age"];
 
@@ -22,7 +29,7 @@ const signUpSchema = z
       )
       .nonempty("Password is required"),
 
-    age: z.number(),
+    age: z.coerce.number(),
   })
   .strict();
 
@@ -31,10 +38,37 @@ const SignUpForm = () => {
     resolver: zodResolver(signUpSchema),
   });
 
+  const [error, setError] = useState("");
+
   const { errors } = formState;
 
+  const navigate = useNavigate();
+
   function onSubmit(data) {
-    console.log(data);
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        // Signed up
+        const user = userCredential.user;
+
+        return updateProfile(auth.currentUser, {
+          displayName: data.name,
+          photoURL: "https://example.com/jane-q-user/profile.jpg",
+        });
+      })
+      .then(() => {
+        navigate("/browse");
+
+        toast("User created Sucessfully");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        setError(errorMessage);
+        // ..
+      });
+
+    reset();
   }
 
   return (
@@ -52,6 +86,8 @@ const SignUpForm = () => {
               <FormError>{errors[label].message}</FormError>
             ) : null;
           })}
+
+          {error && <FormError>{error}</FormError>}
         </div>
       )}
 
@@ -60,7 +96,7 @@ const SignUpForm = () => {
       <StyledInput
         type="text"
         placeholder="Email or mobile number"
-        {...register("identifier")}
+        {...register("email")}
       />
 
       <StyledInput
@@ -69,11 +105,7 @@ const SignUpForm = () => {
         {...register("password")}
       />
 
-      <StyledInput
-        type="number"
-        {...register("age", { isValidNumber: true })}
-        placeholder="Age"
-      />
+      <StyledInput type="number" {...register("age")} placeholder="Age" />
 
       <button className="bg-red-600 text-white font-semibold py-2 px-4 rounded-md">
         {"Sign Up"}
