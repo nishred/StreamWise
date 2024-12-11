@@ -13,14 +13,7 @@ import toast from "react-hot-toast";
 const Header = ({ position = "static" }) => {
   const { isAuthenticated, fullName } = useSelector((store) => store.user);
 
-  const user = useSelector((store) => store.user);
-
-  console.log("user in header", user);
-
-  console.log(isAuthenticated, fullName);
-
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   return (

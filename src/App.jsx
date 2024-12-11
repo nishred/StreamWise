@@ -8,22 +8,17 @@ import { Toaster } from "react-hot-toast";
 
 import Browse from "./pages/Browse";
 
-import { auth } from "./utils/firebase";
-
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect, useState } from "react";
-
-import { useDispatch } from "react-redux";
-
-import { createUser, removeUser } from "./redux/userSlice";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 
-const App = () => {
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const App = () => {
+  const queryClient = new QueryClient();
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
@@ -45,7 +40,8 @@ const App = () => {
         </Routes>
       </BrowserRouter>
       <Toaster />
-    </>
+      <ReactQueryDevtools initialIsOpen={true} />
+    </QueryClientProvider>
   );
 };
 

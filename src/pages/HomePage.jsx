@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Trending from "../components/Trending";
 import Header from "../components/Header";
@@ -28,9 +28,12 @@ const Hero = styled.div`
 `;
 
 const HomePage = () => {
+  const navigate = useNavigate();
 
-  const isAuthenticated = useSelector(store => store.user.isAuthenticated)
-   
+  const isAuthenticated = useSelector((store) => store.user.isAuthenticated);
+
+  if (isAuthenticated) navigate("/browse");
+
   return (
     <div className="relative">
       <Background />
@@ -60,9 +63,9 @@ const HomePage = () => {
 
             <Link
               className="px-8 py-4 bg-red-600 text-white font-bold rounded-full text-xl"
-              to={isAuthenticated?"/browse":"/signup"}
+              to={isAuthenticated ? "/browse" : "/signup"}
             >
-              {isAuthenticated?"Browse":"Join Now"}
+              {isAuthenticated ? "Browse" : "Join Now"}
             </Link>
           </div>
 
