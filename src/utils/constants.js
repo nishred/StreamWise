@@ -8,9 +8,7 @@ export const API_OPTIONS = {
 };
 
 export const MOVIE_URL = "https://api.themoviedb.org/3/movie"
-
 export const TMDB_IMG_URL = "https://image.tmdb.org/t/p/w500";
-
 export const secondaryList = [
 
   {
@@ -36,3 +34,13 @@ export const secondaryList = [
     type: "popular",
   },
 ];
+
+export const SUPPORTED_LANGUAGES = [
+  { identifier: "en", name: "English" },
+  { identifier: "hindi", name: "Hindi" },
+  { identifier: "spanish", name: "Spanish" },
+];
+
+
+
+export const OPEN_API_KEY  = "sk-proj-ouJErbZrGSxU2YbsE0kLizjIle_V4m0jXpXMwt0Qtj";

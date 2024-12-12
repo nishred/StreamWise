@@ -9,17 +9,30 @@ import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 
 import toast from "react-hot-toast";
+import { Background } from "../pages/HomePage";
 
-const Header = ({ position = "static" }) => {
+import { NavLink, useLocation } from "react-router-dom";
+
+import { SUPPORTED_LANGUAGES } from "../utils/constants";
+import { changeLanguage } from "../redux/appConfigSlice";
+import { useState } from "react";
+
+const Header = () => {
   const { isAuthenticated, fullName } = useSelector((store) => store.user);
+
+  const lang = useSelector((store) => store.appConfig.lang);
+
+  const location = useLocation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [selectVal, setSelectVal] = useState("en");
+
+  console.log(SUPPORTED_LANGUAGES);
+
   return (
-    <div
-      className={`${position} flex justify-between bg-transparent items-center`}
-    >
+    <div className="absolute flex justify-between bg-transparent items-center z-10 w-full px-4">
       <Link to={"/"}>
         <img
           className="w-44"
@@ -37,9 +50,41 @@ const Header = ({ position = "static" }) => {
       )}
       {isAuthenticated && (
         <div className="flex items-center gap-2">
-          <span className="px-2 py-1 bg-slate-700 text-white font-bold rounded-full">
-            {fullName}
-          </span>
+          <select
+            className="px-4 py-2 bg-slate-700 text-slate-300 rounded-lg font-semibold"
+            value={lang}
+            onChange={(e) => {
+              dispatch(changeLanguage({ lang: e.target.value }));
+            }}
+          >
+            {SUPPORTED_LANGUAGES.map((langOption) => {
+              return (
+                <option
+                  key={langOption.identifier}
+                  value={langOption.identifier}
+                >
+                  {langOption.name}
+                </option>
+              );
+            })}
+          </select>
+
+          <NavLink
+            to={location.pathname.endsWith("gpt") ? "/browse" : "gpt"}
+            className={({ isActive }) => {
+              return isActive
+                ? "px-4 py-2 bg-red-800 text-white font-bold rounded-lg"
+                : "px-4 py-2 bg-red-500 text-white rounded-lg";
+            }}
+          >
+            GPT Search
+          </NavLink>
+
+          {fullName && (
+            <span className="px-2 py-1 bg-slate-700 text-white font-bold rounded-full">
+              {fullName}
+            </span>
+          )}
           <button
             onClick={() => {
               signOut(auth)

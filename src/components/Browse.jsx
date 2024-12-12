@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import Header from "../components/Header";
-import { Background } from "./HomePage";
-import { Container } from "./HomePage";
+import Header from "./Header";
+import { Background } from "../pages/HomePage";
+import { Container } from "../pages/HomePage";
 import { API_OPTIONS } from "../utils/constants";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNowPlaying } from "../services/movies";
-import VideoContainer from "../components/VideoContainer";
-import MovieList from "../components/MovieList";
-import SecondaryContainer from "../components/SecondaryContainer";
+import VideoContainer from "./VideoContainer";
+import MovieList from "./MovieList";
+import SecondaryContainer from "./SecondaryContainer";
+import { useSearchParams } from "react-router-dom";
+import GptSearch from "./GptSearch";
 
 // adult: false;
 // backdrop_path: "/3V4kLQg0kSqPLctI5ziYWabAZYF.jpg";
@@ -31,26 +33,15 @@ const Browse = () => {
   });
 
   const movies = data ? data.results : null;
-
   const movie = movies ? movies[0] : null;
-
-  console.log(movie);
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <>
-      <div className="relative">
-        <Background />
-        <Container>
-          <Header position="relative" />
-        </Container>
-      </div>
-
-      <div className="relative">
+      <div className="relative border-solid border-[3px] border-red-950">
         <VideoContainer movie={movie} />
       </div>
-
       <SecondaryContainer />
     </>
   );
