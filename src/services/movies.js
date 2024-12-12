@@ -22,7 +22,18 @@ export async function fetchVideos(id) {
 }
 
 export async function fetchMovieList(type) {
-  const response = await fetch(`${MOVIE_URL}/${type}`,API_OPTIONS);
+  const response = await fetch(`${MOVIE_URL}/${type}`, API_OPTIONS);
+
+  const json = await response.json();
+
+  return json;
+}
+
+export async function searchMovies(name) {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/search/movie?query=${name}`,
+    API_OPTIONS
+  );
 
   const json = await response.json();
 

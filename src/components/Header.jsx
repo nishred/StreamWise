@@ -29,10 +29,12 @@ const Header = () => {
 
   const [selectVal, setSelectVal] = useState("en");
 
+  const showGpt = location.pathname.endsWith("gpt");
+
   console.log(SUPPORTED_LANGUAGES);
 
   return (
-    <div className="absolute flex justify-between bg-transparent items-center z-10 w-full px-4">
+    <div className="absolute flex justify-between bg-transparent items-center w-full z-10  px-4">
       <Link to={"/"}>
         <img
           className="w-44"
@@ -50,27 +52,29 @@ const Header = () => {
       )}
       {isAuthenticated && (
         <div className="flex items-center gap-2">
-          <select
-            className="px-4 py-2 bg-slate-700 text-slate-300 rounded-lg font-semibold"
-            value={lang}
-            onChange={(e) => {
-              dispatch(changeLanguage({ lang: e.target.value }));
-            }}
-          >
-            {SUPPORTED_LANGUAGES.map((langOption) => {
-              return (
-                <option
-                  key={langOption.identifier}
-                  value={langOption.identifier}
-                >
-                  {langOption.name}
-                </option>
-              );
-            })}
-          </select>
+          {showGpt && (
+            <select
+              className="px-4 py-2 bg-slate-700 text-slate-300 rounded-lg font-semibold"
+              value={lang}
+              onChange={(e) => {
+                dispatch(changeLanguage({ lang: e.target.value }));
+              }}
+            >
+              {SUPPORTED_LANGUAGES.map((langOption) => {
+                return (
+                  <option
+                    key={langOption.identifier}
+                    value={langOption.identifier}
+                  >
+                    {langOption.name}
+                  </option>
+                );
+              })}
+            </select>
+          )}
 
           <NavLink
-            to={location.pathname.endsWith("gpt") ? "/browse" : "gpt"}
+            to={showGpt ? "/browse" : "/browse/gpt"}
             className={({ isActive }) => {
               return isActive
                 ? "px-4 py-2 bg-red-800 text-white font-bold rounded-lg"

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 export const Container = styled.div`
   max-width: 95%;
   margin: 0px auto;
+  position: relative;
 `;
 
 export const Background = styled.div`
